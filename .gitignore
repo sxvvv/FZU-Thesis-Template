@@ -17,6 +17,7 @@
 *.toc
 *.xdv
 *.pdf
+!docs/*.pdf
 !README.md
 !LICENSE
 

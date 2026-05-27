@@ -1,35 +1,35 @@
-\chapter{模板用法示例}
+\chapter{排版元素}
 
-\section{插图示例}
+\section{插图}
 
-图 \ref{fig:example} 使用 \LaTeX{} 绘制了一个占位框。实际写作时，可将图片放入 \texttt{FIG} 目录，并用 \verb|\includegraphics| 引用。
+图 \ref{fig:example} 使用 \LaTeX{} 绘制了一个图片框。实际写作时，可将图片放入 \texttt{FIG} 目录，并用 \verb|\includegraphics| 引用。
 
 \begin{figure}[htbp]
   \centering
   \fbox{\rule{0pt}{4cm}\rule{0.75\linewidth}{0pt}}
-  \caption{示例图片占位}
+  \caption{图片排版}
   \label{fig:example}
 \end{figure}
 
-\section{表格示例}
+\section{表格}
 
 表 \ref{tab:example} 展示三线表的基本写法。
 
 \begin{table}[htbp]
   \centering
-  \caption{示例表格}
+  \caption{实验结果}
   \label{tab:example}
   \begin{tabular}{ccc}
     \toprule
     方法 & 指标一 & 指标二 \\
     \midrule
-    方法A & 0.90 & 0.85 \\
-    方法B & 0.92 & 0.88 \\
+    基线方法 & 0.90 & 0.85 \\
+    本文方法 & 0.92 & 0.88 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\section{列表示例}
+\section{列表}
 
 \begin{enumerate}
   \item 第一项内容。

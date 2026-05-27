@@ -2,23 +2,21 @@
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{fzuthesis}[2026/05/27 2.1.0 LaTeX class for Fuzhou University thesis template]
 
-%% import global options
+%% Class options
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newif\ifmasterdegree\masterdegreefalse %默认为master
+\newif\ifmasterdegree\masterdegreefalse
 \newif\ifpdfcover\pdfcoverfalse
 \newif\ifchapterx\chapterxfalse
+\newif\ifblindreview\blindreviewfalse
 
 \DeclareOption{master}{\masterdegreetrue}
-\DeclareOption{pdfcover}{\pdfcovertrue} %using pdfcover,TOdo
+\DeclareOption{pdfcover}{\pdfcovertrue}
+\DeclareOption{blindreview}{\blindreviewtrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
-\ProcessOptions\relax %revised by Quansheng Guan \ProcessOptions
+\ProcessOptions\relax
 \LoadClass[12pt,a4paper,openany]{book}
 
-%% define 几个宏
-\newcommand{\scutthesis}{%
-  S\hspace{-0.3ex}\raisebox{-0.5ex}{C}\hspace{-0.3ex}U\hspace{0.1em}\raisebox{-0.5ex}{T}%
-  \textsc{Thesis}
-}
+%% Thesis metadata
 \def \institute#1{\gdef\@institute{#1}}
 \def \supervisor#1{\gdef\@supervisor{#1}}
 \def \studentid#1{\gdef\@studentid{#1}}
@@ -33,45 +31,35 @@
 \def\@major{专业名称}
 \def\@degreecategory{工程硕士}
 \def\@university{福州大学}
-\def\@thesistitlecn{论文中文题目}
+\def\@thesistitlecn{中文题名}
 \def\@thesistitleen{THESIS ENGLISH TITLE}
 \ifmasterdegree \newcommand{\@degree}{硕士} \else \newcommand{\@degree}{博士} \fi
 \newcommand{\thesissubject}{\@university\@degree{}学位论文}
 \renewcommand{\today}{\the\year~年~\the\month~月~\the\day~日}
 
-%% 加载几个常用的sty packages
+%% Base packages
 \RequirePackage{ifpdf}
 \RequirePackage{ifthen}
-\RequirePackage{doc}
 \RequirePackage{keyval}
 \RequirePackage[dvipsnames]{xcolor}
 \RequirePackage{indentfirst}
 \RequirePackage{makeidx} % 索引
-\RequirePackage{amssymb} %this package conflicts with xeCJK, place it before xeCJK to avoid the coflict.
+\RequirePackage{amssymb} % Load before xeCJK.
 \RequirePackage[final]{pdfpages}
 \RequirePackage{color}
 \usepackage{fontspec}
 
-%\RequirePackage{prettyref} %不需要
-
-%% 设置页面布局
+%% Page layout
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage[top=2.54cm,bottom=2.54cm,left=3.18cm,right=3.18cm,
  headheight=1.5cm,
  footskip=1cm
 ]{geometry}
 
-%% 字体设置
-%\RequirePackage[BoldFont, SlantFont,CJKnumber]{xeCJK} % xeCJK package, CJKnumber deprecated.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-by MCH
-\RequirePackage[BoldFont, SlantFont]{xeCJK} %CJKnumber已弃用
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\@ifpackagelater {xeCJK}  { 2008/12/29 }
-\RequirePackage{CJKnumb} % used in recent TEX distribution
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-by MCH
-\RequirePackage{xCJKnumb} %中文编号如第一章的“一”，利用xCJKnumb设置
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\punctstyle{kaiming}
+%% Fonts
+\RequirePackage[BoldFont, SlantFont]{xeCJK}
+\RequirePackage{CJKnumb}
+\RequirePackage{xCJKnumb}
 \IfFontExistsTF{Times New Roman}{%
   \setmainfont[Mapping=tex-text]{Times New Roman}%
 }{%
@@ -132,10 +120,7 @@
 \newcommand{\TimesNewRoman}{\CJKfamily{TNR}}
 
 
-% 很多字体字号并没有使用。第一个参数指定字号，第二个参数为baselineskip默认=1.2倍字号(pt). 结合\linespread可以实现控制行距。
-% 但这里的设置暂时不清楚为什么，也暂时找不到其他方法。
-% ToDo：使用更好的字体字号行距控制方法。例如用\usepackage{setspace}，然后\onehalfspacing实现单倍行距。但具体细节待考证。
-%% Font size
+%% Chinese font sizes
 \newcommand{\chuhao}{\fontsize{42pt}{46pt}\selectfont}
 \newcommand{\xiaochuhao}{\fontsize{36pt}{40pt}\selectfont}
 \newcommand{\yichu}{\fontsize{32pt}{36pt}\selectfont}
@@ -147,7 +132,7 @@
 \newcommand{\xiaosanhao}{\fontsize{15pt}{20pt}\selectfont}
 \newcommand{\sihao}{\fontsize{14pt}{16pt}\selectfont}
 \newcommand{\xiaosihao}{\fontsize{12pt}{20pt}\selectfont}
-\newcommand{\wuhao}{\fontsize{10.5pt}{13pt}\selectfont} % change 10.95pt to 10.5pt --by mch, 真正的五号字应该是10.5。10.95是通常所说的11pt，在英文排版中使用。
+\newcommand{\wuhao}{\fontsize{10.5pt}{13pt}\selectfont}
 \newcommand{\xiaowuhao}{\fontsize{9pt}{11pt}\selectfont}
 \newcommand{\liuhao}{\fontsize{7.5pt}{9pt}\selectfont}
 \newcommand{\xiaoliuhao}{\fontsize{6.5pt}{7.5pt}\selectfont}
@@ -160,20 +145,14 @@
 \def\CJKindent{%
     \settowidth\CJK@twochars{\CJK@spaceChar\CJK@spaceChar}%
     \parindent\CJK@twochars}
-\newcommand{\cndash}{\rule{0.0em}{0pt}\rule[0.35em]{1.4em}{0.05em}\rule{0.2em}{0pt}} % 中文破折号,added by Quansheng
+\newcommand{\cndash}{\rule{0.0em}{0pt}\rule[0.35em]{1.4em}{0.05em}\rule{0.2em}{0pt}}
 
-% 报警处理
+% Keep page height stable without stretching paragraph spacing.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%不要拉大行距使得页面充满
 \raggedbottom
-% 去掉页面中的badboxes报警，同上
-% \setlength\parskip{.5\baselineskip
-% 	plus .1\baselineskip
-% 	minus .4\baselineskip
-% }
-\hbadness=10000 \tolerance=10000 \hfuzz=150pt % 去掉表格中的badboxes报警,看着不爽
+\hbadness=10000 \tolerance=10000 \hfuzz=150pt
 
-% My fonts for Scut thesis字体字号设置，由于部分内容的字体使用默认设置，因此部分字体用不到。
+%% Font styles required by thesis sections.
 \renewcommand{\normalsize}{\xiaosihao\songti\normalfont} % Normal font size 小四号宋体
 \newcommand{\TitleinabstractCN}{\heiti\xiaoerhao}         % 摘要第一行中文标题的字体
 \newcommand{\absnamecn}{\heiti\sihao}         % 中文“摘要”字样的字体
@@ -208,7 +187,7 @@
 \newcommand{\tocsubsubsectionfont}{\normalsize}      % 目录上X.Y.Z小节的字体
 
 
-\newcommand{\pubfont}{\songti\wuhao\normalfont}          % 《攻读博士/硕士学位期间取得的研究成果》字体，2022年更新。
+\newcommand{\pubfont}{\songti\wuhao\normalfont}          % 《攻读博士/硕士学位期间取得的研究成果》字体
 
 \newcommand{\thanktitlefont}{\heiti\sanhao}    % “致谢”字样的字体
 \newcommand{\appendixtitlefont}{\heiti\sanhao} % “附录”字样的字体
@@ -231,45 +210,21 @@
 \DeclareGraphicsExtensions{.pdf,.eps,.jpg,.png} % 如果插入的图片没有指定扩展名,那么依次搜索下面的扩展名所对应的文件
 \RequirePackage{subfig} % config兼容subfigure命令
 \RequirePackage{float} % 可以使用［H］命令
-\RequirePackage{caption} % 定义图的标题格式：居中. 使用caption3.0
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 根据子图引用显示，重定义部分参数 ——by mch
+\RequirePackage{caption}
+% Subfigure labels and references.
 \DeclareSubrefFormat{parens}{#1#2)}
 \DeclareSubrefFormat{subparens}{#2)}
 \DeclareCaptionListOfFormat{parens}{#1#2)}
 \DeclareCaptionListOfFormat{subparens}{#2)}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \DeclareCaptionFont{capFont}{\ftcaptionfont} % 表格名及图名
 \DeclareCaptionLabelSeparator{twospace}{~~}
-\captionsetup{ labelsep=space,% 去掉图标签后的冒号 % 原模板labelsep=twospace，而论文撰写规范要求是space
+\captionsetup{ labelsep=space,
   belowskip=0bp,aboveskip=0bp,
   justification=raggedright,singlelinecheck=true,width=.88\linewidth,
   font={capFont}, figurename=图,tablename=表,listfigurename=图录,listtablename=表录}
 \captionsetup[figure]{position=bottom,aboveskip=6bp,belowskip=0bp}
 \captionsetup[subfloat]{captionskip=6bp,nearskip=0bp,farskip=0bp,topadjust=0bp,
-  justification=centering,labelformat=parens,labelsep=space,subrefformat=subparens,listofformat=parens}%要使分图题和图题一样字号，选项加上 font={capFont}
-
-%%%%%%%%%%定义双标题命令
-% 注释掉双语标题 ——by mch
-%\newcommand{\FigureBicaption}[2]{
-%  \renewcommand{\figurename}{图}
-%  \vspace{8pt}
-%  \caption{#1}
-%  \addtocounter{figure}{-1}
-%  \renewcommand{\figurename}{Fig.}
-%  \captionsetup{list=false}
-%  \vspace{6pt}
-%  \caption{#2}
-%  \captionsetup{list=true}
-%  \renewcommand{\figurename}{图}
-%}
-%\newcommand{\SubfloatCaption}[4]  % Two Parameters, the first one is the width of the subfigure,
-%{
-%  \subfloat[#2]{
-%    \label{#3}
-%    \addtocounter{subfigure}{-1}
-%    \subfloat[\vspace{-5pt}#1]{#4}
-%  }%
-%}
+  justification=centering,labelformat=parens,labelsep=space,subrefformat=subparens,listofformat=parens}
 
 %% 表格
 \RequirePackage{array} % 扩展了 array 和 tabular 环境功能
@@ -378,25 +333,18 @@
  extendedchars=false,columns=flexible,mathescape=false
   breakautoindent=true
 }
-\renewcommand{\lstlistingname}{代码} %% 重命名Listings标题头 added by Guan
+\renewcommand{\lstlistingname}{代码}
 
-%%%%%%%%%%%%%%%%%%--by MCH--%%%%%%%%%%%%%%%%%%%%%%%%%%%%2022-2-26更新
-%---ref: https://blog.csdn.net/youyagaozitai/article/details/70210297?%3E
-% 增加目录的项目——tocbibind
-%正文区写 \tableofcontents %输出目录命令，输出内容是正文中/section等的内容。 
-%若在目录中显示其他条目，使用：  
+%% Bibliography and table of contents entries.
 \RequirePackage[nottoc]{tocbibind} %增加目录项目，tocbibind宏包会自动加入目录项本身、参考文献、索引等项目。[nottoc]取消了对自身的显示
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand{\bibname}{参考文献}
 
-% 设置目录
+% Table of contents.
 %%%%%%%%%%%%%%%%%
 \RequirePackage{titletoc}
-%\renewcommand\contentsname{\centerline{\toctitlefont{目\quad{}录}}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-by MCH
 \renewcommand{\contentsname}{\texorpdfstring{\toctitlefont 目\quad{}录}{目录}}	%中文目录
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \let\FZU@tableofcontents\tableofcontents
 \renewcommand{\tableofcontents}{%
   \begingroup
@@ -431,7 +379,7 @@
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{2}
 
-% Text style
+% Chapter and section titles.
 %%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage[pagestyles, rm]{titlesec}%调用titlesec涵盖fancyhdr的功能
 \renewcommand{\chaptername}{第\xCJKnumber{\thechapter}章}
@@ -442,10 +390,8 @@
 
 %\titlespacing{\chapter}{0pt}{3ex plus .5ex minus .5ex}{3ex plus .5ex minus .5ex} % 缩短章节标题的上边距
 \setlength{\parskip}{0ex}% 正文段前段后距：无空行
-% Heading spacing follows the 2016 FZU specification: fixed 20pt line spacing
-% for text/headings, with title after-skips in these ranges: chapter 30--36pt,
-% section 18--24pt, subsection 12--15pt, subsubsection 6--9pt. The before-skips
-% mirror the FZU Word template for visual consistency.
+% Spacing follows the 2016 FZU specification: fixed 20pt line spacing
+% for text and headings, with title after-skips in the prescribed ranges.
 \titlespacing{\chapter}{0pt}{0pt}{32pt}
 \titlespacing{\section}{0pt}{10pt}{20pt}
 \titlespacing{\subsection}{0pt}{8pt}{14pt}
@@ -470,7 +416,8 @@
   }
 \AtEndDocument{}
 
-%------------------
+% Title page. In writing drafts, a simple in-template title page is used.
+% For final submission, pass the pdfcover option and provide thesis_cover.pdf.
 \newcommand{\FZU@maketitleplaceholder}{%
   \begin{titlepage}
     \thispagestyle{empty}
@@ -482,21 +429,25 @@
     \vspace{0.6cm}
     {\bfseries\large \@thesistitleen\par}
     \vfill
-    {\xiaosihao
-    \begin{tabular}{rl}
-      作者： & \@author \\
-      学号： & \@studentid \\
-      学院： & \@institute \\
-      专业： & \@major \\
-      学位类别： & \@degreecategory \\
-      指导教师： & \@supervisor \\
-    \end{tabular}\par}
+    \ifblindreview
+      {\xiaosihao 盲审版本\par}
+    \else
+      {\xiaosihao
+      \begin{tabular}{rl}
+        作者： & \@author \\
+        学号： & \@studentid \\
+        学院： & \@institute \\
+        专业： & \@major \\
+        学位类别： & \@degreecategory \\
+        指导教师： & \@supervisor \\
+      \end{tabular}\par}
+    \fi
     \vspace{1.5cm}
     {\xiaosihao \today\par}
   \end{titlepage}
 }
 
-\renewcommand{\maketitle}{% called outside
+\renewcommand{\maketitle}{%
   \ifpdfcover
     \IfFileExists{thesis_cover.pdf}{%
       \includepdf[pages={1-2}]{thesis_cover.pdf}%
@@ -564,10 +515,8 @@
 % 显式设置数学模式中的数字和运算符使用文本字体 Times New Roman
 \DeclareSymbolFont{operators}{TU}{\rmdefault}{m}{n}
 \SetSymbolFont{operators}{bold}{TU}{\rmdefault}{b}{n}
-%允许公式换页显示,否则大型推导公式都在一页内，
-%一页显示不下放到第二页，导致很大的空白空间，很不好看
+% Allow multi-line displayed equations to break across pages when necessary.
 \allowdisplaybreaks[4]
-%\setlength\jot{1pt} %公式之间的距离,TODO
 
 
 \newtheoremstyle{definition}% name
@@ -583,8 +532,7 @@
 \newtheorem{definition}{定义~}[chapter]
 \newtheorem{example}{例~}[chapter]
 \newtheorem{remark}{说明~}[chapter]
-\newtheorem{assumption}{假设~}[chapter]	% by mch
-% ------改为definition，by mch
+\newtheorem{assumption}{假设~}[chapter]
 \newtheorem{proposition}{命题~}[chapter]
 \newtheorem{lemma}{引理~}[chapter]
 \newtheorem{theorem}{定理~}[chapter]
@@ -593,8 +541,6 @@
 \newtheorem{case}{情形~}[chapter]
 \newtheorem{conjecture}{猜想~}[chapter]
 \newtheorem{property}{性质~}[chapter]
-% ----------
-
 %% 可继续用\newtheorem命令添加需要的环境
 
 \newtheoremstyle{plain}% name
@@ -622,4 +568,4 @@
 \belowdisplayskip=6pt plus 2pt minus 2pt
 
 \endinput
-%% End of file `scutthesis.cls'.
+%% End of file `fzuthesis.cls'.
