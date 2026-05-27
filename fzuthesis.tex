@@ -1,0 +1,103 @@
+\documentclass[unicode,master]{fzuthesis}
+
+\usepackage{fontspec,color,array,longtable,graphicx}
+\usepackage{multirow}
+\usepackage{anyfontsize}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\floatname{algorithm}{算法}
+\setlength{\textfloatsep}{12pt plus 2pt minus 2pt}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
+
+\usepackage[backend=biber,style=gb7714-2015,gbalign=gb7714-2015,gbpub=false,gbnamefmt=lowercase]{biblatex}
+\addbibresource[location=local]{references.bib}
+
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xunicode}
+\pagestyle{fancy}
+\fancyfoot[C]{\headfont\thepage}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhead[RE]{}
+\fancyhead[RO]{}
+\fancyhead[LE]{}
+\fancyhead[LO]{}
+\fancyhead[CO]{\headfont{论文中文题目}}
+\fancyhead[CE]{\headfont{福州大学硕士学位论文}}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\usepackage[
+  unicode=true,
+  bookmarks=true,
+  bookmarksnumbered=true,
+  bookmarksopen=false,
+  breaklinks=false,
+  pdfborder={0 0 1},
+  backref=false,
+  colorlinks=true
+]{hyperref}
+\hypersetup{
+  linkcolor=black,
+  anchorcolor=black,
+  citecolor=black,
+  filecolor=black,
+  menucolor=black,
+  urlcolor=black,
+  pdfstartview=FitH
+}
+
+\title{论文中文题目}
+\author{张三}
+\studentid{0000000000}
+\institute{某某学院}
+\major{专业名称}
+\degreecategory{工程硕士}
+\supervisor{李四 教授}
+\thesistitlecn{论文中文题目}
+\thesistitleen{THESIS ENGLISH TITLE}
+
+\makeatletter
+\providecommand{\LyX}{\texorpdfstring{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}{LyX}}
+\providecommand{\tabularnewline}{\\}
+\makeatother
+
+\begin{document}
+
+\maketitle
+\frontmatter
+\include{Contents/abstract}
+
+\pdfbookmark{\contentsname}{toc}
+\tableofcontents
+% \listoffigures
+% \listoftables
+% \include{Contents/symbols}
+
+\mainmatter
+\fancypagestyle{plain}{\pagestyle{fancy}}
+\pagestyle{fancy}
+
+\include{Contents/chapter01}
+\include{Contents/chapter02}
+\include{Contents/conclusion}
+
+\backmatter
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
+\phantomsection
+\addcontentsline{toc}{chapter}{参考文献}
+\printbibliography
+
+\include{Contents/acknowledge}
+\include{Contents/CV}
+\include{Contents/publications}
+
+\end{document}
