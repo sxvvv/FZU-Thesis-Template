@@ -91,6 +91,10 @@ compile_fzuthesis.bat
 
 模板优先使用 Windows 常见字体 `Times New Roman`、`SimSun`、`SimHei`、`KaiTi`、`FangSong`。如果系统缺少这些字体，会回退到 TeX Live 自带字体。正式提交前，请按学校格式审核要求核对字体、字号、行距、页边距、目录、图表题名和参考文献格式。
 
+## 致谢
+
+本模板整理过程中参考了 [HuangTM23/FZU_Thesis](https://github.com/HuangTM23/FZU_Thesis) 的项目结构和格式适配思路，在此表示感谢。
+
 ## 许可
 
 本项目使用 GPL-3.0 许可证发布。模板基于公开 LaTeX 模板整理和修改，使用、修改或再次发布时请保留相应许可信息。
